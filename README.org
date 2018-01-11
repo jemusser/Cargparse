@@ -21,22 +21,36 @@ Add an argument to the expected flags with a resulting type boolean.
 
 
 *** /int/ add_integer_arg(/char*/ name, /char*/ short_flag, /char*/ long_flag, /int/ default, /int/ required, /char*/ description)
-~name~ is used only within the context of the code for future lookup.\\
-~short_flag~ is the expected flag as a single character preceeded by a single dash i.e. =-p=\\
-~long_flag~ is the expected flag as two dashes followed by a string i.e. =--print=\\
-~default~ will return a default value for the flag if it is not included.  If ~required~ is set, default is ignored.\\
-~required~ is an integer value representing whether a flag is required to run the program (0 for not required, 1 for required).  WARNING: if a required flag is not included, the program will halt.\\
-~description~ is the string descrition of the field, and will appear as part of the automatically generated ~--help~ output.\\
+~name~ is used only within the context of the code for future lookup.
+
+~short_flag~ is the expected flag as a single character preceeded by a single dash i.e. =-p=
+
+~long_flag~ is the expected flag as two dashes followed by a string i.e. =--print=
+
+~default~ will return a default value for the flag if it is not included.  If ~required~ is set, default is ignored.
+
+~required~ is an integer value representing whether a flag is required to run the program (0 for not required, 1 for required). 
+WARNING: if a required flag is not included, the program will halt.
+
+~description~ is the string descrition of the field, and will appear as part of the automatically generated ~--help~ output.
+
 Add an argument to the expected flags with a resulting type integer.
 
 
 *** /int/ add_string_arg(/char*/ name, /char*/ short_flag, /char*/ long_flag, /char*/ default, /int/ required, /char*/ description)
-~name~ is used only within the context of the code for future lookup.\\
-~short_flag~ is the expected flag as a single character preceeded by a single dash i.e. =-p=\\
-~long_flag~ is the expected flag as two dashes followed by a string i.e. =--print=\\
-~default~ will return a default value for the flag if it is not included.  If ~required~ is set, default is ignored.\\
-~required~ is an integer value representing whether a flag is required to run the program (0 for not required, 1 for required).  WARNING: if a required flag is not included, the program will halt.\\
-~description~ is the string descrition of the field, and will appear as part of the automatically generated ~--help~ output.\\
+~name~ is used only within the context of the code for future lookup.
+
+~short_flag~ is the expected flag as a single character preceeded by a single dash i.e. =-p=
+
+~long_flag~ is the expected flag as two dashes followed by a string i.e. =--print=
+
+~default~ will return a default value for the flag if it is not included.  If ~required~ is set, default is ignored.
+
+~required~ is an integer value representing whether a flag is required to run the program (0 for not required, 1 for required). 
+WARNING: if a required flag is not included, the program will halt.
+
+~description~ is the string descrition of the field, and will appear as part of the automatically generated ~--help~ output.
+
 Add an argument to the expected flags with a resulting type string.
 
 
@@ -44,15 +58,18 @@ Add an argument to the expected flags with a resulting type string.
 ~parse_args~ takes the ~nargs~ and ~args~ values passed to a ~main~ function as is.  These arguments are then parsed and placed into query-able objects.
 
 *** /int/ get_boolean_arg(/char*/ name)
-~name~ is the reference name given to an argument in the ~add_boolean_arg~ function.\\
+~name~ is the reference name given to an argument in the ~add_boolean_arg~ function.
+
 When called after ~parse_args~ returns the value stored by the flag in the argument's provided as an int.
 
 *** /int/ get_integer_arg(/char*/ name)
-~name~ is the reference name given to an argument in the ~add_integer_arg~ function.\\
+~name~ is the reference name given to an argument in the ~add_integer_arg~ function.
+
 When called after ~parse_args~ returns the value stored by the flag in the argument's provided as an int.
 
 *** /char*/ get_string_arg(/char*/ name)
-~name~ is the reference name given to an argument in the ~add_string_arg~ function.\\
+~name~ is the reference name given to an argument in the ~add_string_arg~ function.
+
 When called after ~parse_args~ returns the value stored by the flag in the argument's provided as a char*.
 
 ** Example
