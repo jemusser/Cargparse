@@ -11,9 +11,12 @@ I.e. ~foo -f here there~ is equivolent to ~foo here -f there~ (as long as -f is 
 
 
 *** /int/ add_boolean_arg(/char*/ name, /char*/ short_flag, /char*/ long_flag, /char*/ description)
-~name~ is used only within the context of the code for future lookup.\\
-~short_flag~ is the expected flag as a single character preceeded by a single dash i.e. =-p=\\
-~long_flag~ is the expected flag as two dashes followed by a string i.e. =--print=\\
+~name~ is used only within the context of the code for future lookup.
+
+~short_flag~ is the expected flag as a single character preceeded by a single dash i.e. =-p=
+
+~long_flag~ is the expected flag as two dashes followed by a string i.e. =--print=
+
 Add an argument to the expected flags with a resulting type boolean.
 
 
