@@ -48,27 +48,38 @@ Arg* _find_flagless(int index) {
   return tmparg;
 }
 
-void print_help() {
+void print_help(const char* desc) {
   Arg* tmparg = head;
+  printf("\n%s\n\n", desc);
   while (tmparg) {
-    int llen = strlen(tmparg->long_flag);
-    int slen = (tmparg->short_flag ? 1 : 0);
+    int llen = (tmparg->long_flag == NULL ? 0 : strlen(tmparg->long_flag));
     
-    for (int i=0; i < 1 - slen; i++) printf(" ");
-    printf("-%c", tmparg->short_flag);
+    printf("  ");
+    if (tmparg->short_flag) printf("-%c", tmparg->short_flag);
+    else printf("  ");
+    printf("  ");
+    if (tmparg->long_flag) printf("--%s", tmparg->long_flag);
+    else printf("  ");
     for (int i=0; i < 15 - llen; i++) printf(" ");
-    printf("--%s    %s\n", tmparg->long_flag, tmparg->desc);
+
+    switch (tmparg->data.type) {
+    case INTEGER: printf(" [integer] "); break;
+    case STRING:  printf("  [string] "); break;
+    case BOOLEAN: printf(" [boolean] "); break;
+    }
+    
+    printf("  %s %s\n", (tmparg->required ? "(REQUIRED)":""), tmparg->description);
     tmparg = tmparg->next;
   }
 }
 
-void parse_args(int nargs, char* kwargs[]) {
+void parse_args(int nargs, char* kwargs[], const char* desc) {
   int nflagless = 0;
   
   for (int i = 1; i < nargs; i++) {
     char* arg = kwargs[i];
     if (strcmp(arg, "--help") == 0 || strcmp(arg, "-h") == 0) {
-      print_help();
+      print_help(desc);
       exit(0);
     }
     if (strncmp(arg, "--", 2) == 0) {
@@ -129,6 +140,7 @@ int add_argument(const char* name, const char* _short, const char* _long, ArgVal
   newArg->data.type = _type;
   newArg->data.value = _default;
   newArg->exists = (required ? 0 : 1);
+  newArg->required = required;
   newArg->description = desc;
   newArg->next = NULL;
   

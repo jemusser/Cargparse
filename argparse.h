@@ -26,10 +26,11 @@ struct t_arg {
   char short_flag;
   ArgType data;
   int exists;
+  int required;
   const char* description;
 };
 
-void parse_args(int nargs, char* kwargs[]);
+void parse_args(int nargs, char* kwargs[], const char* desc);
 int add_integer_arg(const char* name, char* _short, const char* _long, int _default, int required, const char* desc);
 int add_string_arg(const char* name, char* _short, const char* _long, char* _default, int required, const char* desc);
 int add_boolean_arg(const char* name, char* _short, const char* _long, const char* desc);

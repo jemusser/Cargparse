@@ -54,8 +54,10 @@ WARNING: if a required flag is not included, the program will halt.
 Add an argument to the expected flags with a resulting type string.
 
 
-*** /void/ parse_args(/int/ nargs, /char*/ args)
+*** /void/ parse_args(/int/ nargs, /char**/ args, /char*/ desc)
 ~parse_args~ takes the ~nargs~ and ~args~ values passed to a ~main~ function as is.  These arguments are then parsed and placed into query-able objects.
+
+The ~desc~ parameter is used by the automated help generation to describe the program's purpose.
 
 *** /int/ get_boolean_arg(/char*/ name)
 ~name~ is the reference name given to an argument in the ~add_boolean_arg~ function.
