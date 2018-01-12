@@ -18,7 +18,7 @@ void assert(int v, char* format, ...) {
 Arg* _find_long(const char* value) {
   Arg* tmparg = head;
   while (tmparg) {
-    if (strcmp(value, tmparg->long_flag) == 0) break;
+    if (strncmp(value, tmparg->long_flag, strlen(value)) == 0) break;
     tmparg = tmparg->next;
   }
   assert(tmparg != NULL, "Unknown flag - %s\n", value);
@@ -78,7 +78,7 @@ void parse_args(int nargs, char* kwargs[], const char* desc) {
   
   for (int i = 1; i < nargs; i++) {
     char* arg = kwargs[i];
-    if (strcmp(arg, "--help") == 0 || strcmp(arg, "-h") == 0) {
+    if (strncmp(arg, "--help", strlen(arg)) == 0 || strncmp(arg, "-h", 2) == 0) {
       print_help(desc);
       exit(0);
     }
@@ -175,7 +175,7 @@ int add_boolean_arg(const char* name, char* _short, const char* _long, const cha
 ArgValue get_argument(const char* name) {
   Arg* tmphead = head;
   while (tmphead) {
-    if (strcmp(tmphead->name, name) == 0) {
+    if (strncmp(tmphead->name, name, strlen(name)) == 0) {
       break;
       return tmphead->data.value;
     }
