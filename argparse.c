@@ -1,21 +1,28 @@
 #include "argparse.h"
+#include <xinu.h>
+#include <stdlib.h>
 
 Arg* head = 0;
 Arg* tail = 0;
+const char* description;
 
 char* l_ptr;
+
+extern void _fdoprnt(char*, va_list, int (*)(did32, char), int);
 
 void assert(int v, char* format, ...) {
   if (!v) {
     va_list args;
+    syscall putc(did32, char);
+    
     va_start(args, format);
-    vprintf(format, args);
+    _fdoprnt((char*)format, args, putc, stdout);
     va_end(args);
-    exit(-1);
+    exit();
   }
 }
 
-Arg* _find_long(const char* value) {
+Arg* _find_long(char* value) {
   Arg* tmparg = head;
   while (tmparg) {
     if (strncmp(value, tmparg->long_flag, strlen(value)) == 0) break;
@@ -37,20 +44,22 @@ Arg* _find_short(char value) {
 
 Arg* _find_flagless(int index) {
   Arg* tmparg = head;
+  int i = index;
   while (tmparg) {
     if (!tmparg->long_flag && ! tmparg->short_flag) {
-      if (index == 0) break;
-      index -= 1;
+      if (i == 0) break;
+      i -= 1;
     }
     tmparg = tmparg->next;
   }
-  assert(tmparg != NULL, "Unknown positional argument - %d\n", index);
+  assert(tmparg != NULL, "Unknown positional argument - %d\n", index + 1);
   return tmparg;
 }
 
-void print_help(const char* desc) {
+void print_help() {
   Arg* tmparg = head;
-  printf("\n%s\n\n", desc);
+  
+  printf("\n%s\n\n", description);
   while (tmparg) {
     int llen = (tmparg->long_flag == NULL ? 0 : strlen(tmparg->long_flag));
     
@@ -73,14 +82,20 @@ void print_help(const char* desc) {
   }
 }
 
-void parse_args(int nargs, char* kwargs[], const char* desc) {
+void init_args(const char* desc) {
+  head = 0;
+  tail = 0;
+  description = desc;
+}
+
+void parse_args(int nargs, char* kwargs[]) {
   int nflagless = 0;
   
   for (int i = 1; i < nargs; i++) {
     char* arg = kwargs[i];
     if (strncmp(arg, "--help", strlen(arg)) == 0 || strncmp(arg, "-h", 2) == 0) {
-      print_help(desc);
-      exit(0);
+      print_help();
+      exit();
     }
     if (strncmp(arg, "--", 2) == 0) {
       /* long name */
@@ -132,8 +147,8 @@ void parse_args(int nargs, char* kwargs[], const char* desc) {
   }
 }
 
-int add_argument(const char* name, const char* _short, const char* _long, ArgValue _default, ty _type, int required, const char* desc) {
-  Arg* newArg = (Arg*) malloc(sizeof(Arg));
+int add_argument(const char* name, const char* _short, char* _long, ArgValue _default, ty _type, int required, const char* desc) {
+  Arg* newArg = (Arg*) getmem(sizeof(Arg));
   newArg->name = name;
   newArg->short_flag = (_short == NULL ? 0 : _short[0]);
   newArg->long_flag = _long;
@@ -156,23 +171,23 @@ int add_argument(const char* name, const char* _short, const char* _long, ArgVal
   return 1;
 }
 
-int add_integer_arg(const char* name, char* _short, const char* _long, int _default, int required, const char* desc) {
+int add_integer_arg(const char* name, char* _short, char* _long, int _default, int required, const char* desc) {
   ArgValue val;
   val.i = _default;
   return add_argument(name, _short, _long, val, INTEGER, required, desc);
 }
-int add_string_arg(const char* name, char* _short, const char* _long, char* _default, int required, const char* desc) {
+int add_string_arg(const char* name, char* _short, char* _long, char* _default, int required, const char* desc) {
   ArgValue val;
   val.s = _default;
   return add_argument(name, _short, _long, val, STRING, required, desc);
 }
-int add_boolean_arg(const char* name, char* _short, const char* _long, const char* desc) {
+int add_boolean_arg(const char* name, char* _short, char* _long, const char* desc) {
   ArgValue val;
   val.i = 0;
   return add_argument(name, _short, _long, val, BOOLEAN, 0, desc);
 }
 
-ArgValue get_argument(const char* name) {
+ArgValue get_argument(char* name) {
   Arg* tmphead = head;
   while (tmphead) {
     if (strncmp(tmphead->name, name, strlen(name)) == 0) {
@@ -185,22 +200,22 @@ ArgValue get_argument(const char* name) {
   return tmphead->data.value;
 }
 
-char* get_string_arg(const char* name) {
+char* get_string_arg(char* name) {
   return get_argument(name).s;
 }
-int get_boolean_arg(const char* name) {
+int get_boolean_arg(char* name) {
   return get_argument(name).i;
 }
-int get_integer_arg(const char* name) {
+int get_integer_arg(char* name) {
   return get_argument(name).i;
 }
 
-void del_argparse() {
+void del_args() {
   Arg* tmphead = head;
   Arg* current;
   while (tmphead) {
     current = tmphead;
     tmphead = tmphead->next;
-    free(current);
+    freemem((char*)current, sizeof(Arg));
   }
 }
