@@ -83,6 +83,7 @@ Must be called before program concludes to clean argument data.
 #+BEGIN_SRC C
 // ./foo -u -x 100 -t lookup arg1 arg2
 int main(int nargs, char** args) {
+  init_args("This is some function that does somthing");
   add_string_arg("type", "t", "type", "other", 0, "The operation type.");
   add_boolean_arg("upload", "u", "upload", "Do an upload operation.");
   add_integer_arg("times", "x", "times", 1, 1, "Number of times to do the operation.");
@@ -96,5 +97,7 @@ int main(int nargs, char** args) {
   printf("Times: %d\n", get_integer_arg("times"));
   printf("src: %s\n", get_string_arg("src"));
   printf("dst: %s\n", get_string_arg("dst"));
+  
+  del_args();
 }
 #+END_SRC
