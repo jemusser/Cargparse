@@ -1,0 +1,5 @@
+* Install on Xinu
+
+copy argparse.c to the ~shell~ directory in the xinu repository.
+
+copy argparse.h to the ~include~ directory in the xinu repository.
