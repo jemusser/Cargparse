@@ -58,6 +58,7 @@ Arg* _find_flagless(int index) {
 
 void print_help() {
   Arg* tmparg = head;
+  int i;
   
   printf("\n%s\n\n", description);
   while (tmparg) {
@@ -69,7 +70,7 @@ void print_help() {
     printf("  ");
     if (tmparg->long_flag) printf("--%s", tmparg->long_flag);
     else printf("  ");
-    for (int i=0; i < 15 - llen; i++) printf(" ");
+    for (i=0; i < 15 - llen; i++) printf(" ");
 
     switch (tmparg->data.type) {
     case INTEGER: printf(" [integer] "); break;
@@ -90,8 +91,9 @@ void init_args(const char* desc) {
 
 void parse_args(int nargs, char* kwargs[]) {
   int nflagless = 0;
+  int i;
   
-  for (int i = 1; i < nargs; i++) {
+  for (i = 1; i < nargs; i++) {
     char* arg = kwargs[i];
     if (strncmp(arg, "--help", strlen(arg)) == 0 || strncmp(arg, "-h", 2) == 0) {
       print_help();
@@ -116,7 +118,8 @@ void parse_args(int nargs, char* kwargs[]) {
       /* short name */
       arg += 1;
       int len = strlen(arg);
-      for (int j=0; j < len; j++) {
+      int j;
+      for (j=0; j < len; j++) {
 	Arg* a = _find_short(arg[j]);
 	if (a) {
 	  if (a->data.type == BOOLEAN) a->data.value.i = 1;
