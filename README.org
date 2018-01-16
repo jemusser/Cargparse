@@ -57,7 +57,7 @@ Add an argument to the expected flags with a resulting type string.
 *** /void/ init_args(/char*/ desc) 
 The ~desc~ parameter is used by the automated help generation to describe the program's purpose.   
 
-*** /void/ parse_args(/int/ nargs, /char**/ args, /char*/ desc)
+*** /void/ parse_args(/int/ nargs, /char**/ args)
 ~parse_args~ takes the ~nargs~ and ~args~ values passed to a ~main~ function as is.  These arguments are then parsed and placed into query-able objects.
 
 *** /int/ get_boolean_arg(/char*/ name)
